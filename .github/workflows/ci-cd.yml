@@ -1,0 +1,55 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.x'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --no-build 
+
+  pack-and-publish:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Pack
+      run: dotnet pack --configuration Release -o ./artifacts
+
+    - name: Publish to GitHub Packages
+      working-directory: artifacts
+      run: | 
+        dotnet nuget push * --source "https://nuget.pkg.github.com/Liveron/index.json" \
+        --api-key ${{ secrets.NUGET_PACKAGES_ACCESS_TOKEN }} \
+        --skip-duplicate
+

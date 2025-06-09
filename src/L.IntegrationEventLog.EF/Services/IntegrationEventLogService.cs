@@ -1,4 +1,4 @@
-﻿using L.EventBus.Core.Events;
+﻿using L.Heritage.Shared.Types.Integration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Reflection;
