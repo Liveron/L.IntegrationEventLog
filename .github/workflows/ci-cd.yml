@@ -45,6 +45,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+        source-url: https://nuget.pkg.github.com/Liveron/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_PACKAGES_ACCESS_TOKEN }}
 
     - name: Pack
       run: dotnet pack --configuration Release -o ./artifacts
