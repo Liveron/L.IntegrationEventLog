@@ -1,5 +1,4 @@
-﻿using L.EventBus.Core.Events;
-using L.Heritage.Shared.Types.Integration;
+﻿using L.Heritage.Shared.Types.Integration;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
